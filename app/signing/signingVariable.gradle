@@ -1,4 +1,4 @@
 ext.keyAlias="Jasmine"
 ext.keyPassword="aligodoo1999"
-ext.storeFile="siging/keystore.jks"
+ext.storeFile="signing/keystore.jks"
 ext.storePassword="aligodoo1999"
