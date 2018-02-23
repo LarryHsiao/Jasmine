@@ -1,18 +1,39 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'jacoco'
+apply plugin: 'com.github.triplet.play'
+apply plugin: 'io.fabric'
+apply from: "signing/signingVariable.gradle"
 
+jacoco {
+    toolVersion = "0.7.9"
+}
+final int BUILD_VERSION = System.currentTimeMillis()/(1000*60*60) // One hour increase 1
 android {
+    playAccountConfigs {
+        defaultAccountConfig {
+            jsonFile = file('../publish_key.json')
+        }
+    }
+    signingConfigs {
+        keystore {
+            keyAlias '$keyAlias'
+            keyPassword '$keyPassword'
+            storeFile file('$storeFile')
+            storePassword '$storePassword'
+        }
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.silverhetch.jasmine"
         minSdkVersion 23
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode BUILD_VERSION
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.keystore
+        playAccountConfig = playAccountConfigs.defaultAccountConfig
         externalNativeBuild {
             cmake {
                 cppFlags "-frtti -fexceptions"
@@ -20,10 +41,28 @@ android {
         }
     }
     buildTypes {
+        debug {
+            testCoverageEnabled = true
+        }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    dataBinding {
+        enabled true
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            all {
+                jacoco {
+                    includeNoLocationClasses = true
+                }
+            }
+        }
+    }
+    productFlavors {
     }
     externalNativeBuild {
         cmake {
@@ -32,22 +71,63 @@ android {
     }
 }
 
+play {
+    track = 'beta'
+    untrackOld = true // will untrack 'alpha' while upload to 'beta'
+}
+
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.51"
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:cardview-v7:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support:preference-v7:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
     implementation 'com.google.firebase:firebase-core:11.0.4'
     implementation 'com.google.firebase:firebase-crash:11.0.4'
     implementation 'com.google.firebase:firebase-invites:11.0.4'
     implementation 'com.google.firebase:firebase-appindexing:11.0.4'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+        transitive = true
+    }
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.robolectric:robolectric:3.5.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
 
+project.afterEvaluate {
+    android.applicationVariants.all { variant ->
+        def name = variant.name
+        def testTaskName = "test${name.capitalize()}UnitTest"
 
+        tasks.create(name: "${testTaskName}Coverage", type: JacocoReport, dependsOn: "$testTaskName") {
+            group = "Reporting"
+            description = "Generate Jacoco coverage reports for the ${name.capitalize()} build."
 
+            classDirectories = fileTree(
+                    dir: "${project.buildDir}/intermediates/classes/${name}",
+                    includes: ['**/com/silverhetch/Jasmine/**'],
+                    excludes: ['**/R.class',
+                               '**/R$*.class',
+                               '**/*$ViewInjector*.*',
+                               '**/*$ViewBinder*.*',
+                               '**/BuildConfig.*',
+                               '**/Manifest*.*']
+            )
 
+            sourceDirectories = files(['src/main/java'].plus(android.sourceSets[name].java.srcDirs))
+            executionData = files("${project.buildDir}/jacoco/${testTaskName}.exec")
+
+            reports {
+                xml.enabled = true
+                html.enabled = true
+            }
+        }
+    }
+}
 
 apply plugin: 'com.google.gms.google-services'

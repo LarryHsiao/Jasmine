@@ -5,6 +5,10 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
@@ -13,6 +17,8 @@ buildscript {
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
         classpath 'com.google.gms:google-services:3.1.0'
+        classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
+        classpath 'io.fabric.tools:gradle:1.24.4'
     }
 }
 
@@ -20,6 +26,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'http://172.104.79.181:81/repository/maven-public/' }
     }
 }
 
