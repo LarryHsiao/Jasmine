@@ -20,7 +20,7 @@ android {
         keystore {
             keyAlias '$keyAlias'
             keyPassword '$keyPassword'
-            storeFile file('$storeFile')
+            storeFile file('signing/keystore.jks')
             storePassword '$storePassword'
         }
     }
