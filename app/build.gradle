@@ -4,7 +4,11 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'io.fabric'
-apply from: "signing/signingVariable.gradle"
+
+def keystorePropertiesFile = file("signing/variable.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 
 jacoco {
     toolVersion = "0.7.9"
@@ -18,10 +22,10 @@ android {
     }
     signingConfigs {
         keystore {
-            keyAlias '$keyAlias'
-            keyPassword '$keyPassword'
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
             storeFile file('signing/keystore.jks')
-            storePassword '$storePassword'
+            storePassword keystoreProperties['storePassword']
         }
     }
     compileSdkVersion 26
