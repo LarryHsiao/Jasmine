@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.firebase-perf'
 
 def keystorePropertiesFile = file("signing/variable.properties")
 def keystoreProperties = new Properties()
@@ -94,6 +95,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-invites:11.8.0'
     implementation 'com.google.firebase:firebase-appindexing:11.8.0'
     implementation 'com.google.firebase:firebase-firestore:11.8.0'
+    implementation 'com.google.firebase:firebase-perf:11.8.0'
     implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }
