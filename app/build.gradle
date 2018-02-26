@@ -14,7 +14,7 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 jacoco {
     toolVersion = "0.7.9"
 }
-final int BUILD_VERSION = System.currentTimeMillis()/(1000*60*60) // One hour increase 1
+final int BUILD_VERSION = System.currentTimeMillis() / (1000 * 60 * 60) // One hour increase 1
 android {
     playAccountConfigs {
         defaultAccountConfig {
@@ -107,25 +107,35 @@ dependencies {
 
 project.afterEvaluate {
     android.applicationVariants.all { variant ->
-        def name = variant.name
-        def testTaskName = "test${name.capitalize()}UnitTest"
+        def variantName = variant.name
+        def testTaskName = "test${variantName.capitalize()}UnitTest"
 
         tasks.create(name: "${testTaskName}Coverage", type: JacocoReport, dependsOn: "$testTaskName") {
             group = "Reporting"
-            description = "Generate Jacoco coverage reports for the ${name.capitalize()} build."
+            description = "Generate Jacoco coverage reports for the ${variantName.capitalize()} build."
+            def excludes = [
+                    '**/R.class',
+                    '**/R$*.class',
+                    '**/*$ViewInjector*.*',
+                    '**/*$ViewBinder*.*',
+                    '**/BuildConfig.*',
+                    '**/Manifest*.*'
+            ]
 
+            def includes = [
+                    '**/com/silverhetch/Jasmine/**'
+            ]
             classDirectories = fileTree(
-                    dir: "${project.buildDir}/intermediates/classes/${name}",
-                    includes: ['**/com/silverhetch/Jasmine/**'],
-                    excludes: ['**/R.class',
-                               '**/R$*.class',
-                               '**/*$ViewInjector*.*',
-                               '**/*$ViewBinder*.*',
-                               '**/BuildConfig.*',
-                               '**/Manifest*.*']
+                    dir: "${project.buildDir}/intermediates/classes/${variantName}",
+                    includes: includes,
+                    excludes: excludes
+            ) + fileTree(
+                    dir: "${project.buildDir}/tmp/kotlin-classes/${variantName}",
+                    includes: includes,
+                    excludes: excludes
             )
 
-            sourceDirectories = files(['src/main/java'].plus(android.sourceSets[name].java.srcDirs))
+            sourceDirectories = files(['src/main/java'].plus(android.sourceSets[variantName].java.srcDirs))
             executionData = files("${project.buildDir}/jacoco/${testTaskName}.exec")
 
             reports {
