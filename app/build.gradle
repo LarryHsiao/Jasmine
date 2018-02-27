@@ -5,6 +5,7 @@ apply plugin: 'jacoco'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.firebase.firebase-perf'
+apply plugin: 'kotlin-kapt'
 
 def keystorePropertiesFile = file("signing/variable.properties")
 def keystoreProperties = new Properties()
@@ -81,7 +82,12 @@ play {
     untrackOld = true // will untrack 'alpha' while upload to 'beta'
 }
 
+kapt {
+    generateStubs = true
+}
+
 dependencies {
+    kapt "com.android.databinding:compiler:3.0.1"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.51"
     implementation 'com.android.support:appcompat-v7:26.1.0'
@@ -103,6 +109,13 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:3.5.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation 'com.silverhetch:aura:1.0.5@aar'
+    implementation 'com.silverhetch:clotho:1.0.2'
+    implementation 'com.google.guava:guava:24.0-android'
+    implementation 'android.arch.lifecycle:extensions:1.1.0'
+    implementation 'android.arch.persistence.room:runtime:1.0.0'
+    annotationProcessor 'android.arch.lifecycle:compiler:1.1.0'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.0.0'
 }
 
 project.afterEvaluate {

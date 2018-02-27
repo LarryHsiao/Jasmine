@@ -16,7 +16,7 @@
             android:name="firebase_crash_collection_enabled"
             android:value="@bool/app_release" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".android.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,4 +1,4 @@
 Jasmine
 =======
 
-A Android application for account recording.
+An Android application for account recording.

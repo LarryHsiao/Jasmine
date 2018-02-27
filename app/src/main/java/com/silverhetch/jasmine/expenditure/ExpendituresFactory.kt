@@ -4,5 +4,11 @@ package com.silverhetch.jasmine.expenditure
  * Created by mikes on 2/26/2018.
  */
 class ExpendituresFactory {
-    fun instance(): Expenditures = MemoryExpenditures()
+    companion object {
+        private val INSTANCE: Expenditures = MemoryExpenditures()
+    }
+
+    fun instance(): Expenditures {
+        return INSTANCE
+    }
 }
