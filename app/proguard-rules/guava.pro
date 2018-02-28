@@ -1,3 +1,7 @@
 -dontwarn afu.org.checkerframework.**
 -dontwarn org.checkerframework.**
 -dontwarn java.lang.ClassValue
+-dontwarn sun.misc.Unsafe
+-dontwarn com.google.common.collect.MinMaxPriorityQueue
+-dontwarn com.google.common.util.concurrent.FuturesGetChecked**
+-dontwarn javax.lang.model.element.Modifier
