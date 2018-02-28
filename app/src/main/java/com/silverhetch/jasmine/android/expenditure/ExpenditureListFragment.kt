@@ -29,7 +29,7 @@ class ExpenditureListFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        expenditureList_listView.adapter = ExpenditureListAdapter(model?.list!!.value!!)
+        expenditureList_listView.adapter = ExpenditureListAdapter(model?.list()!!.value!!)
         expenditureList_create.setOnClickListener {
             val activityRef = activity;
             if (activityRef is PageControl) {

@@ -7,23 +7,21 @@ import android.view.ViewGroup
 import com.silverhetch.jasmine.R
 import com.silverhetch.jasmine.databinding.ItemExpenditureBinding
 import com.silverhetch.jasmine.expenditure.Expenditure
-import com.silverhetch.util.view.ViewHolder
+import com.silverhetch.util.view.DataBindingViewHolder
 
 /**
  * Created by mikes on 2/27/2018.
  */
 
-class ExpenditureListAdapter(val expenditure: List<Expenditure>) : RecyclerView.Adapter<ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+class ExpenditureListAdapter(private val expenditures: List<Expenditure>) : RecyclerView.Adapter<DataBindingViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): DataBindingViewHolder {
         val binding = DataBindingUtil.inflate<ItemExpenditureBinding>(LayoutInflater.from(parent?.context), R.layout.item_expenditure, parent, false)
-        return ViewHolder(binding.root)
+        return DataBindingViewHolder(binding.root, binding)
     }
 
-    override fun getItemCount(): Int = expenditure.count()
+    override fun getItemCount(): Int = expenditures.count()
 
-
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.getTextView(R.id.itemExpenditure_title)?.setText(expenditure[position].title())
+    override fun onBindViewHolder(holder: DataBindingViewHolder?, position: Int) {
+        holder?.getViewDataBinding<ItemExpenditureBinding>()?.expenditure = expenditures[position]
     }
-
 }

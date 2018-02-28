@@ -6,6 +6,7 @@ import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.*
+import android.widget.Toast
 import com.silverhetch.jasmine.R
 import kotlinx.android.synthetic.main.fragment_expenditure_create.*
 
@@ -38,7 +39,14 @@ class ExpenditureCreateFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menuConfirm_confirm -> {
-                model?.createExpenditure(expenditureCreate_titleEditText.text.toString(), 0)
+                try {
+                    model?.createExpenditure(
+                            expenditureCreate_titleEditText.text.toString(),
+                            expenditureCreate_amountEditText.text.toString().toInt()
+                    )
+                } catch (e: Exception) {
+                    Toast.makeText(context, R.string.appError_unknown, Toast.LENGTH_SHORT).show()
+                }
                 fragmentManager.popBackStackImmediate()
             }
         }

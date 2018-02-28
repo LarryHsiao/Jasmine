@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.firebase.firebase-perf'
-apply plugin: 'kotlin-kapt'
 
 def keystorePropertiesFile = file("signing/variable.properties")
 def keystoreProperties = new Properties()
@@ -41,11 +41,6 @@ android {
         signingConfig signingConfigs.keystore
         multiDexEnabled true
         playAccountConfig = playAccountConfigs.defaultAccountConfig
-        externalNativeBuild {
-            cmake {
-                cppFlags "-frtti -fexceptions"
-            }
-        }
     }
     buildTypes {
         debug {
@@ -53,7 +48,9 @@ android {
         }
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules/general.pro',
+                    'proguard-rules/guava.pro'
         }
     }
     dataBinding {
@@ -71,20 +68,14 @@ android {
     }
     productFlavors {
     }
-    externalNativeBuild {
-        cmake {
-            path "CMakeLists.txt"
-        }
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
     }
 }
 
 play {
     track = 'beta'
     untrackOld = true // will untrack 'alpha' while upload to 'beta'
-}
-
-kapt {
-    generateStubs = true
 }
 
 dependencies {

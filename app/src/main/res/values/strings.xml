@@ -2,6 +2,7 @@
     <string name="app_name">Jasmine</string>
 
     <string name="expenditureCreate_title">Expenditure</string>
+    <string name="expenditureCreate_amount">Amount</string>
 
     <string name="expenditureList_create">Create</string>
     <string name="app_confirm">Confirm</string>

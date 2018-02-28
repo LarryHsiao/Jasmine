@@ -1,0 +1,3 @@
+-dontwarn afu.org.checkerframework.**
+-dontwarn org.checkerframework.**
+-dontwarn java.lang.ClassValue
