@@ -141,9 +141,7 @@ project.afterEvaluate {
             )
 
             sourceDirectories = files([
-                    'src/main/java',
-                    android.sourceSets[variantName].java.srcDirs,
-                    'src/main/kotlin'
+                    android.sourceSets.main.java.srcDirs
             ])
             executionData = files("${project.buildDir}/jacoco/${testTaskName}.exec")
 
