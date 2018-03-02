@@ -149,6 +149,12 @@ project.afterEvaluate {
                 xml.enabled = true
                 html.enabled = true
             }
+
+            println '##teamcity[jacocoReport ' +
+                    'dataPath=\'app/build/jacoco/testDebugUnitTest.exec\' ' +
+                    'includes=\'com.silverhetch.jasmine.*\' ' +
+                    'excludes=\'**.BR **.Manifest *.databinding.*Binding **.*Test **.BuildConfig **.R **.R.*\' ' +
+                    'classpath=\'+:**/com/silverhetch/jasmine/**\']'
         }
     }
 }
