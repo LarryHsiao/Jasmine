@@ -6,7 +6,10 @@ import com.silverhetch.jasmine.expenditure.repeat.Repeat
  * Created by mikes on 2/26/2018.
  */
 
-class MemoryExpenditure(val database: ArrayList<Expenditure>, val title: String, val amount: Int, val repeat: Repeat) : Expenditure {
+class MemoryExpenditure(private val database: ArrayList<Expenditure>,
+                        private val title: String,
+                        private val amount: Int,
+                        private val repeat: Repeat) : Expenditure {
     override fun delete() {
         database.remove(this)
     }
